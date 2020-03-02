@@ -1,0 +1,12 @@
+{
+	"service": "controller",
+	"service_version": "second",
+	"request": {
+		"header": "bla"		
+	},
+	"response": {
+		"body": 123
+	},
+	"request_ts": 123456789,
+	"response_ts": 123456720 
+}

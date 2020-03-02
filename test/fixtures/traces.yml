@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  request: 
+  response: 
+  resquest_ts: 2020-03-01 22:02:57
+  response_ts: 2020-03-01 22:02:57
+  service_version: one
+
+two:
+  request: 
+  response: 
+  resquest_ts: 2020-03-01 22:02:57
+  response_ts: 2020-03-01 22:02:57
+  service_version: two
