@@ -92,6 +92,54 @@ RSpec.describe "Traces", type: :request do
         end
       end
     end
+
+    describe "filter query params" do
+      let(:service_version2) { ServiceVersion.create(service: service, version: "0.0.2") }
+      let(:other_service) { Service.create(name: "other_service_name") }
+      let(:other_service_version) { ServiceVersion.create(service: other_service, version: "0.0.11") }
+
+      before do
+        2.times { |i| construct_trace(service_version: service_version) }
+        3.times { |i| construct_trace(service_version: service_version2) }
+        3.times { |i| construct_trace(service_version: other_service_version) }
+      end
+
+      context "given a ?service param" do
+        it "returns the traces belonging to the given service" do
+          get traces_path, params: { service: "test_service_name" }
+          expect(response).to have_http_status(200)
+          json_body = JSON.parse(response.body)
+          expect(json_body["data"].length).to eq(5)
+
+          json_body["data"].each do |trace|
+            expect(trace["relationships"]["service"]["data"]["id"]).to eq(service.id.to_s)
+          end
+        end
+      end
+
+      context "given a ?service_version param without a ?service param" do
+        it "returns all traces ignoring the ?service_version param " do
+          get traces_path, params: { service_version: "0.0.2" }
+          expect(response).to have_http_status(200)
+          json_body = JSON.parse(response.body)
+          expect(json_body["data"].length).to eq(8)
+        end
+      end
+
+      context "given a ?service and a ?service_version param" do
+        it "returns the traces belonging to the specified service and version" do
+          get traces_path, params: { service: "test_service_name", service_version: "0.0.2" }
+          expect(response).to have_http_status(200)
+          json_body = JSON.parse(response.body)
+          expect(json_body["data"].length).to eq(3)
+
+          json_body["data"].each do |trace|
+            expect(trace["relationships"]["service"]["data"]["id"]).to eq(service.id.to_s)
+            expect(trace["relationships"]["service_version"]["data"]["id"]).to eq(service_version2.id.to_s)
+          end
+        end
+      end
+    end
   end
 
   describe "POST /traces" do

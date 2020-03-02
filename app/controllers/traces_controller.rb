@@ -1,12 +1,14 @@
 class TracesController < ApplicationController
-  before_action :set_trace, only: [:show, :update, :destroy]
+  before_action :set_trace, only: [:show]
 
   # GET /traces
   def index
-    @traces = Trace
-      .includes(:service_version, :service)
-      .order(request_ts: :asc)
-      .where("request_ts > ?", newer_than)
+    @traces = add_query_filter(
+      Trace
+        .includes(:service_version, :service)
+        .order(request_ts: :asc)
+        .where("request_ts > ?", newer_than)
+    )
       .limit(limit)
 
     render json: serializable_hash(@traces)
@@ -38,6 +40,22 @@ class TracesController < ApplicationController
     params[:newer_than].present? ? Time.zone.parse(params[:newer_than]) : Time.zone.at(0)
   rescue ArgumentError
     Time.zone.at(0)
+  end
+
+  def add_query_filter(original_query)
+    service = params[:service]
+    service_version = params[:service_version]
+
+    if service.present?
+      version_filter = { services: { name: service } }
+      version_filter.merge!(version: service_version) if service_version.present?
+
+      original_query
+        .joins(service_version: :service)
+        .where(service_versions: version_filter)
+    else
+      original_query
+    end
   end
 
   def construct_trace
