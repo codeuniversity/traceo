@@ -1,5 +1,5 @@
 class ServicesController < ApplicationController
-  before_action :set_service, only: [:show, :update, :destroy]
+  before_action :set_service, only: [:show]
 
   # GET /services
   def index
@@ -22,20 +22,6 @@ class ServicesController < ApplicationController
     else
       render json: @service.errors, status: :unprocessable_entity
     end
-  end
-
-  # PATCH/PUT /services/1
-  def update
-    if @service.update(service_params)
-      render json: @service
-    else
-      render json: @service.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /services/1
-  def destroy
-    @service.destroy
   end
 
   private

@@ -24,20 +24,6 @@ class TracesController < ApplicationController
     end
   end
 
-  # PATCH/PUT /traces/1
-  def update
-    if @trace.update(trace_params)
-      render json: serializable_hash(@trace)
-    else
-      render json: @trace.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /traces/1
-  def destroy
-    @trace.destroy
-  end
-
   private
 
   def construct_trace

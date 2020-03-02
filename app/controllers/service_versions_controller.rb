@@ -1,5 +1,5 @@
 class ServiceVersionsController < ApplicationController
-  before_action :set_service_version, only: [:show, :update, :destroy]
+  before_action :set_service_version, only: [:show]
 
   # GET /service_versions
   def index
@@ -22,20 +22,6 @@ class ServiceVersionsController < ApplicationController
     else
       render json: @service_version.errors, status: :unprocessable_entity
     end
-  end
-
-  # PATCH/PUT /service_versions/1
-  def update
-    if @service_version.update(service_version_params)
-      render json: @service_version
-    else
-      render json: @service_version.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /service_versions/1
-  def destroy
-    @service_version.destroy
   end
 
   private
