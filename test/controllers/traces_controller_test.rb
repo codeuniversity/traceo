@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class TracesControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -11,7 +11,7 @@ class TracesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create trace" do
-    assert_difference('Trace.count') do
+    assert_difference("Trace.count") do
       post traces_url, params: { trace: { request: @trace.request, response: @trace.response, response_ts: @trace.response_ts, resquest_ts: @trace.resquest_ts, service_version_id: @trace.service_version_id } }, as: :json
     end
 
@@ -29,7 +29,7 @@ class TracesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy trace" do
-    assert_difference('Trace.count', -1) do
+    assert_difference("Trace.count", -1) do
       delete trace_url(@trace), as: :json
     end
 

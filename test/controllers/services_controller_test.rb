@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ServicesControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -11,7 +11,7 @@ class ServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create service" do
-    assert_difference('Service.count') do
+    assert_difference("Service.count") do
       post services_url, params: { service: { name: @service.name } }, as: :json
     end
 
@@ -29,7 +29,7 @@ class ServicesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy service" do
-    assert_difference('Service.count', -1) do
+    assert_difference("Service.count", -1) do
       delete service_url(@service), as: :json
     end
 

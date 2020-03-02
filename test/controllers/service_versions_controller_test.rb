@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class ServiceVersionsControllerTest < ActionDispatch::IntegrationTest
   setup do
@@ -11,7 +11,7 @@ class ServiceVersionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create service_version" do
-    assert_difference('ServiceVersion.count') do
+    assert_difference("ServiceVersion.count") do
       post service_versions_url, params: { service_version: { service_id: @service_version.service_id, version: @service_version.version } }, as: :json
     end
 
@@ -29,7 +29,7 @@ class ServiceVersionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should destroy service_version" do
-    assert_difference('ServiceVersion.count', -1) do
+    assert_difference("ServiceVersion.count", -1) do
       delete service_version_url(@service_version), as: :json
     end
 
