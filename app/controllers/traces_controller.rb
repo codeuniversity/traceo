@@ -41,9 +41,9 @@ class TracesController < ApplicationController
   private
 
   def construct_trace
-    @service = Service.find_or_create_by(name: trace_params[:service])
+    @service = Service.find_or_create_by(name: trace_params[:service]) if trace_params[:service].present?
 
-    @service_version = ServiceVersion.find_or_create_by(service: @service, version: trace_params[:service_version])
+    @service_version = ServiceVersion.find_or_create_by(service: @service, version: trace_params[:service_version]) if @service.present? && trace_params[:service_version].present?
 
     request_ts = Time.zone.at(trace_params[:request_ts]) unless trace_params[:request_ts].nil?
     response_ts = Time.zone.at(trace_params[:response_ts]) unless trace_params[:response_ts].nil?
