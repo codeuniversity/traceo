@@ -3,7 +3,11 @@ class TracesController < ApplicationController
 
   # GET /traces
   def index
-    @traces = Trace.all.includes(:service_version, :service)
+    @traces = Trace
+      .includes(:service_version, :service)
+      .order(request_ts: :asc)
+      .where("request_ts > ?", newer_than)
+      .limit(limit)
 
     render json: serializable_hash(@traces)
   end
@@ -25,6 +29,16 @@ class TracesController < ApplicationController
   end
 
   private
+
+  def limit
+    params[:limit].present? && params[:limit].to_i > 0 ? params[:limit].to_i : 1000
+  end
+
+  def newer_than
+    params[:newer_than].present? ? Time.zone.parse(params[:newer_than]) : Time.zone.at(0)
+  rescue ArgumentError
+    Time.zone.at(0)
+  end
 
   def construct_trace
     @service = Service.find_or_create_by(name: trace_params[:service]) if trace_params[:service].present?
