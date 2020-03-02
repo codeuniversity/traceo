@@ -5,12 +5,12 @@ class ServiceVersionsController < ApplicationController
   def index
     @service_versions = ServiceVersion.all
 
-    render json: @service_versions
+    render json: serializable_hash(@service_versions)
   end
 
   # GET /service_versions/1
   def show
-    render json: @service_version
+    render json: serializable_hash(@service_version)
   end
 
   # POST /service_versions
@@ -18,13 +18,17 @@ class ServiceVersionsController < ApplicationController
     @service_version = ServiceVersion.new(service_version_params)
 
     if @service_version.save
-      render json: @service_version, status: :created, location: @service_version
+      render json: serializable_hash(@service_version), status: :created, location: @service_version
     else
       render json: @service_version.errors, status: :unprocessable_entity
     end
   end
 
   private
+
+  def serializable_hash(resource)
+    ServiceVersionSerializer.new(resource).serializable_hash
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_service_version

@@ -10,7 +10,7 @@ class TracesController < ApplicationController
 
   # GET /traces/1
   def show
-    render json: @trace
+    render json: serializable_hash(@trace)
   end
 
   # POST /traces

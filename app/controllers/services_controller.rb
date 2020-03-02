@@ -5,12 +5,12 @@ class ServicesController < ApplicationController
   def index
     @services = Service.all
 
-    render json: @services
+    render json: serializable_hash(@services)
   end
 
   # GET /services/1
   def show
-    render json: @service
+    render json: serializable_hash(@service)
   end
 
   # POST /services
@@ -18,13 +18,17 @@ class ServicesController < ApplicationController
     @service = Service.new(service_params)
 
     if @service.save
-      render json: @service, status: :created, location: @service
+      render json: serializable_hash(@service), status: :created, location: @service
     else
       render json: @service.errors, status: :unprocessable_entity
     end
   end
 
   private
+
+  def serializable_hash(resource)
+    ServiceSerializer.new(resource).serializable_hash
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_service
