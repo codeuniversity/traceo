@@ -10,12 +10,13 @@ RSpec.describe "Traces", type: :request do
     let(:service) { Service.create(name: "test_service_name") }
     let(:service_version) { ServiceVersion.create(service: service, version: "0.0.1") }
 
-    context "with no traces in the DB"
-    it "returns an empty traces list" do
-      get traces_path
-      expect(response).to have_http_status(200)
-      json_body = JSON.parse(response.body)
-      expect(json_body).to match({ "data" => [] })
+    context "with no traces in the DB" do
+      it "returns an empty traces list" do
+        get traces_path
+        expect(response).to have_http_status(200)
+        json_body = JSON.parse(response.body)
+        expect(json_body).to match({ "data" => [] })
+      end
     end
 
     context "given a ?limit param" do
