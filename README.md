@@ -21,6 +21,12 @@ with postgres running:
 
 `bundle exec rails s`
 
+or with docker:
+
+`docker-compose up`
+
+all previous comands can be run inside the server container with `docker-compose exec app bash`
+
 ## Endpoints
 
 ### traces
