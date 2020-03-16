@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-postgres-setup
+  labels:
+    name: {{ .Release.Name }}-postgres-setup
+spec:
+  restartPolicy: OnFailure
+  containers:
+    - name: {{ .Release.Name }}-postgres-setup
+      image: {{ .Values.image}}
+      command: ["/bin/sh", "-c"]
+      args: ["bundle exec rails db:create && bundle exec rails db:migrate"]
+      env:
+        - name: "DB_HOST"
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-addresses
+              key: postgresHost
+        - name: "TRACEO_DATABASE_PASSWORD"
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Release.Name }}-postgres-secrets"
+              key: "password"
+        - name: "RAILS_ENV"
+          value: "production"
+        - name: "SECRET_KEY_BASE"
+          valueFrom:
+            secretKeyRef:
+              name: "{{ .Release.Name }}-server-secrets"
+              key: "secretKeyBase"
+
+      resources:
+        requests:
+          cpu: "50m"
+          memory: "250Mi"
+        limits:
+          memory: "500Mi"
+          cpu: "250m"
