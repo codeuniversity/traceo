@@ -1,24 +1,64 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Ruby version
 
-Things you may want to cover:
+see [.ruby-version](.ruby-version)
 
-* Ruby version
+## Database creation
 
-* System dependencies
+with postgres running:
+`bundle exec rails db:create`
 
-* Configuration
+## Database initialization
 
-* Database creation
+`bundle exec rails db:create`
 
-* Database initialization
+## How to run the test suite
 
-* How to run the test suite
+`bundle exec rspec`
 
-* Services (job queues, cache servers, search engines, etc.)
+## Run the server
 
-* Deployment instructions
+`bundle exec rails s`
 
-* ...
+## Endpoints
+
+### traces
+
+`POST /traces`
+
+expects the following json structure:
+
+```json
+{
+  service: "test_service",
+  service_version: "0.0.1",
+  request: { ... }, # any json object
+  response: { ... }, # any json object
+  request_ts: 123456789.5, # unixtimestamp in seconds, can be in microsecond accuracy
+  response_ts: 123456791.5 # unixtimestamp in seconds, can be in microsecond accuracy
+}
+```
+
+`GET /traces?[newer_than=<timestamp: iso8601-string>][&limit=<max:int,default=1000>][&service=<service.name:string>[&service_version=<version: string>]]`
+
+if none of the query params are given, it returns all traces
+
+`newer_than` selects the traces that are newer than the given timestamp.
+The `request_ts` from a previous `GET /traces` can be used here for pagination.
+
+`limit` limits the amount of traces returned to the given integer. Can be used together with `newer_than` for pagination.
+
+`service` filters the traces by a specific service.
+
+`service_version` filters the traces by a specifc service-version. Can only be supplied if `service` is also supplied.
+
+### services
+
+`GET /services`
+
+returns all services known to traceo
+
+`GET /service_versions`
+
+returns all service versions known to traceo
