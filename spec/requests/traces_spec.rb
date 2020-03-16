@@ -2,7 +2,13 @@ require "rails_helper"
 
 RSpec.describe "Traces", type: :request do
   def construct_trace(attributes)
-    default_attributes = { request: { some_key: "foo" }, response: { some_other_key: "bar" }, request_ts: Time.zone.now, response_ts: Time.zone.now + 10.seconds }
+    default_attributes = {
+      request: { some_key: "foo" },
+      response: { some_other_key: "bar" },
+      request_ts: Time.zone.now,
+      response_ts: Time.zone.now + 10.seconds,
+    }
+
     Trace.create(default_attributes.merge(attributes))
   end
 
