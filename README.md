@@ -45,6 +45,7 @@ expects the following json structure:
   "response_ts": 123456791.5
 }
 ```
+Where `request_ts` and `response_ts` are Unix timestamps in seconds (microsecond accuracy is possible)
 
 `GET /traces?[newer_than=<timestamp: iso8601-string>][&limit=<max:int,default=1000>][&service=<service.name:string>[&service_version=<version: string>]]`
 
