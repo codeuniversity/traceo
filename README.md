@@ -37,12 +37,12 @@ expects the following json structure:
 
 ```json
 {
-  service: "test_service",
-  service_version: "0.0.1",
-  request: { ... }, # any json object
-  response: { ... }, # any json object
-  request_ts: 123456789.5, # unixtimestamp in seconds, can be in microsecond accuracy
-  response_ts: 123456791.5 # unixtimestamp in seconds, can be in microsecond accuracy
+  "service": "test_service",
+  "service_version": "0.0.1",
+  "request": { "any": "json object" },
+  "response": { "any": "json object" },
+  "request_ts": 123456789.5,
+  "response_ts": 123456791.5
 }
 ```
 
