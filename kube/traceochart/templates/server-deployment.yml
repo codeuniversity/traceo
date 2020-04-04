@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-server
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-server
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-server
+    spec:
+      containers:
+        - name: {{ .Release.Name }}-server
+          image: {{ .Values.image }}
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "50m"
+            limits:
+              memory: "500Mi"
+              cpu: "250m"
+          env:
+            - name: "DB_HOST"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ .Release.Name }}-addresses
+                  key: postgresHost
+            - name: "TRACEO_DATABASE_PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-postgres-secrets"
+                  key: "password"
+            - name: "RAILS_ENV"
+              value: "production"
+            - name: "SECRET_KEY_BASE"
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-server-secrets"
+                  key: "secretKeyBase"
+          ports:
+            - containerPort: 3000

@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-postgres
+  labels:
+    app: {{ .Release.Name }}-postgres
+spec:
+  serviceName: {{ .Release.Name }}-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-postgres
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-postgres
+    spec:
+      terminationGracePeriodSeconds: 180
+      containers:
+        - name: {{ .Release.Name }}-postgres
+          image: postgres:12
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5678
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "750Mi"
+            requests:
+              cpu: "100m"
+              memory: "250Mi"
+          volumeMounts:
+            - name: {{ .Release.Name }}-postgres-data
+              mountPath: /var/lib/postgresql/data
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-postgres-secrets"
+                  key: "password"
+            - name: "PGDATA"
+              value: "/var/lib/postgresql/data/pgdata"
+  volumeClaimTemplates:
+    - metadata:
+        name: {{ .Release.Name }}-postgres-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 5Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-postgres
+spec:
+  clusterIP: None
+  selector:
+    app: {{ .Release.Name }}-postgres
+  ports:
+    - port: 5678
+      targetPort: 5678

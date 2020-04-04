@@ -4,7 +4,6 @@ RUN apt-get update -qq && apt-get install -y build-essential libxml2-dev libxslt
 
 RUN gem install bundler -v 2.0.2
 
-RUN mkdir /traceo
 WORKDIR /traceo
 COPY Gemfile.lock .
 COPY Gemfile .
